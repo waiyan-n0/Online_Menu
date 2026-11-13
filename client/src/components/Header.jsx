@@ -3,9 +3,9 @@ import {useNavigate, useParams} from 'react-router-dom';
 import test from '../assets/hero.png';
 import { MapPin, Phone } from 'lucide-react';
 import Error from '../pages/Error.jsx';
-const Header = () => {
+const Header = ({slug, isEditMode}) => {
+    console.log(slug, isEditMode);
     const API_URL = `http://${window.location.hostname}:3000`;
-    const { slug } = useParams();
     const navigate = useNavigate();
     const [shopData, setShopData] = useState(null);
     const [error, setError] = useState(false);

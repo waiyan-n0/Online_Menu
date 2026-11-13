@@ -20,6 +20,7 @@ const menuItemSchema = new mongoose.Schema({
     price: {type: Number, required: true},
     //description: {type: String, required: true},
     image: {type: String},
+    deleteUrl: {type: String, default: ''},
 }, {timestamps: true});
 
 const menuItem = mongoose.model('menuItem', menuItemSchema);

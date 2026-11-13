@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Plus, X, FolderPlus } from "lucide-react";
+import {Plus, X, FolderPlus, Trash2} from "lucide-react";
 import SubCategory from "./SubCategory.jsx";
 
 const MainCategory = ({ slug, isEditMode }) => {
@@ -77,15 +77,41 @@ const MainCategory = ({ slug, isEditMode }) => {
     const selectCategory = (name) => {
         setSelectedCategory(name);
     };
-    //console.log('select cate: ',selectedCategory)
+    //console.log('select cate: ',selectedCategory);
+    const handleDelete = async(id) => {
+        if (!window.confirm("This will delete the category & all its subcategories & menu items. Are you sure to delete this?")) return;
+        try{
+            const response = await fetch(`${API_URL}/menu/${slug}/delete-category`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.con) {
+                console.error('Error deleting category :', data);
+                return;
+            }
+            setCategories(prev => prev.filter(item => item._id !== id));
+        }catch(err){
+            console.error('Error deleting category: ', err);
+        }
+    }
     return (
         <div className='flex flex-col w-full'>
             <div className='flex items-center justify-center gap-3 py-4 bg-blue-900 text-white flex-wrap px-4'>
                 {categories.map((cat) => (
                     <div key={cat._id} onClick={() => selectCategory(cat.name)}
-                        className={`cursor-pointer border px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${selectedCategory === cat.name ? 'bg-blue-600 border-white shadow-md' : 'bg-blue-800 border-blue-700 hover:bg-blue-700'}`}
+                        className={`flex items-center justify-content cursor-pointer border px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${selectedCategory === cat.name ? 'bg-blue-600 border-white shadow-md' : 'bg-blue-800 border-blue-700 hover:bg-blue-700'}`}
                     >
-                        {cat.name}
+                        <span>{cat.name}</span>
+                        {isEditMode && (
+                            <button className="pl-2 cursor-pointer" title="Delete Subcategory"
+                                    onClick={(e) => {e.stopPropagation(); handleDelete(cat._id); }} >
+                                <X className="w-3.5 h-3.5"/>
+                            </button>
+                        )}
                     </div>
                 ))}
 
@@ -103,7 +129,7 @@ const MainCategory = ({ slug, isEditMode }) => {
                     <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-2xl w-full max-w-sm space-y-4 relative my-8 sm:my-0 border border-gray-100">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                             <h3 className="text-sm font-bold flex items-center gap-2 text-gray-800">
-                                <FolderPlus className="w-4 h-4 text-blue-600" /> Add Main Category
+                                <FolderPlus className="w-4 h-4 text-blue-600" /> Add Category
                             </h3>
                             <button className="p-1 text-gray-400 hover:text-gray-600 rounded-lg transition-colors cursor-pointer"
                                     onClick={() => setIsModalOpen(false)}
@@ -126,7 +152,7 @@ const MainCategory = ({ slug, isEditMode }) => {
                                     Cancel
                                 </button>
                                 <button type="submit" className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl text-xs transition-colors shadow-sm cursor-pointer">
-                                    Save Category
+                                    Save
                                 </button>
                             </div>
                         </form>
