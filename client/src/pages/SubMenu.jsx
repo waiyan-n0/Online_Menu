@@ -10,7 +10,7 @@ const SubMenu = () => {
     const isEditMode = searchParams.has("mode") && location.hash ==='#edit';
     return (
         <div>
-            <Header/>
+            <Header slug={slug} isEditMode={isEditMode}/>
             <MenuItem submenu={submenu} isEditMode={isEditMode} />
         </div>
     )

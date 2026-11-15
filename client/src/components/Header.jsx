@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
 import test from '../assets/hero.png';
 import { MapPin, Phone } from 'lucide-react';
 import Error from '../pages/Error.jsx';
+import {useNavigate} from "react-router-dom";
 const Header = ({slug, isEditMode}) => {
-    console.log(slug, isEditMode);
-    const API_URL = `http://${window.location.hostname}:3000`;
+    //console.log(slug, isEditMode);
     const navigate = useNavigate();
+    const API_URL = `http://${window.location.hostname}:3000`;
     const [shopData, setShopData] = useState(null);
     const [error, setError] = useState(false);
 
@@ -37,15 +37,15 @@ const Header = ({slug, isEditMode}) => {
         return (<Error error={error} />)
     }
     return (
-        <header className="px-4 py-4 max-w-xl mx-auto bg-white shadow-sm border-b border-gray-100">
+        <header className="px-4 py-4 max-w-xl mx-auto shadow-sm border-b border-gray-100">
             <nav className="flex items-center justify-between pb-3 border-b border-gray-100">
                 <div className="flex flex-col">
-                    <span className="font-extrabold text-lg text-gray-900 tracking-tight">
+                    <span className="font-mallo text-lg text-gray-900 tracking-wider">
                         {shopData ? shopData.name : 'Loading...'}
                     </span>
                 </div>
 
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-500 shadow-sm shrink-0">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#4D230A] shadow-sm shrink-0">
                     <img src={shopData?.logo || test} alt="Shop Logo" className="w-full h-full object-cover" />
                 </div>
             </nav>

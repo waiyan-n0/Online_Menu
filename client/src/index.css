@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+/*body{*/
+/*    background: #F0E8CF;*/
+/*}*/
+
+@font-face {
+    font-family: 'MalloRegular';
+    src: url('./assets/fonts/MalloBold-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'MalloBold';
+    src: url('./assets/fonts/MalloBold-Regular.otf') format('opentype');
+    font-weight: 700;
+}
+
+@theme {
+    --font-mallo: 'MalloRegular', sans-serif; /*font-mallo font-mallo-bold*/
+    --font-mallo-bold: 'MalloBold', sans-serif;
+}
+

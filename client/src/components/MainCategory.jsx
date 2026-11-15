@@ -100,23 +100,23 @@ const MainCategory = ({ slug, isEditMode }) => {
     }
     return (
         <div className='flex flex-col w-full'>
-            <div className='flex items-center justify-center gap-3 py-4 bg-blue-900 text-white flex-wrap px-4'>
+            <div className='flex items-center justify-center gap-4 pt-4 text-white flex-wrap px-4'>
                 {categories.map((cat) => (
                     <div key={cat._id} onClick={() => selectCategory(cat.name)}
-                        className={`flex items-center justify-content cursor-pointer border px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${selectedCategory === cat.name ? 'bg-blue-600 border-white shadow-md' : 'bg-blue-800 border-blue-700 hover:bg-blue-700'}`}
+                        className={`flex items-center justify-center border-2 cursor-pointer px-4 py-2.5 text-lg rounded-2xl font-semibold transition-colors ${selectedCategory === cat.name ? 'bg-amber-700 border-amber-700 shadow-md' : 'bg-amber-900 border-amber-900 hover:bg-amber-700 hover:border-amber-700'}`}
                     >
-                        <span>{cat.name}</span>
+                        <span className='capitalize'>{cat.name}</span>
                         {isEditMode && (
-                            <button className="pl-2 cursor-pointer" title="Delete Subcategory"
+                            <button className="pt-1 pl-2 cursor-pointer" title="Delete Subcategory"
                                     onClick={(e) => {e.stopPropagation(); handleDelete(cat._id); }} >
-                                <X className="w-3.5 h-3.5"/>
+                                <X className="h-5 w-5"/>
                             </button>
                         )}
                     </div>
                 ))}
 
                 {isEditMode && (
-                    <div className='border-2 border-dashed border-white/60 px-3 py-2 rounded-xl cursor-pointer hover:border-white transition-colors flex items-center gap-1.5 text-xs font-semibold'
+                    <div className='text-amber-900 border-amber-900 border-2 border-dashed px-3 py-2 rounded-2xl cursor-pointer hover:border-amber-700 hover:text-amber-700 transition-colors flex items-center gap-1.5 font-semibold'
                         onClick={() => setIsModalOpen(true)}
                     >
                         <Plus className="w-4 h-4" /> Add Category

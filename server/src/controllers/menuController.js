@@ -97,7 +97,7 @@ const getSubCategory = async (req, res, next) => {
 const createMenuItem = async (req, res, next) => {
     try {
         const { slug, submenu } = req.params;
-        const { name, price } = req.body;
+        const { name, variants } = req.body;
 
         let imageUrl = "";
         let deleteUrl = "";
@@ -107,12 +107,10 @@ const createMenuItem = async (req, res, next) => {
             const formData = new URLSearchParams();
             formData.append('image', base64Image);
 
-            const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
+            const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData,
+            });
 
             const imgbbData = await imgbbResponse.json();
             if (!imgbbData.success) {
@@ -122,14 +120,18 @@ const createMenuItem = async (req, res, next) => {
             deleteUrl = imgbbData.data.delete_url;
         }
 
-        if (!name || price === undefined) {
-            return next(new Error('Name and price are required!'));
+        if (!name || !variants) {
+            return next(new Error('Name and pricing variants are required!'));
         }
 
+        // Parse variants and default empty option names to "Standard"
+        const parsedVariants = (typeof variants === 'string' ? JSON.parse(variants) : variants).map(v => ({
+            option: v.option && v.option.trim() !== '' ? v.option.trim() : 'Standard',
+            price: Number(v.price)
+        }));
+
         const shopExist = await shop.findOne({ slug });
-        if (!shopExist) {
-            return next(new Error('Shop not found!'));
-        }
+        if (!shopExist) return next(new Error('Shop not found!'));
 
         const decodedSubmenu = decodeURIComponent(submenu);
         const menuExist = await subCategory.findOne({
@@ -137,29 +139,18 @@ const createMenuItem = async (req, res, next) => {
             name: { $regex: new RegExp(`^${decodedSubmenu}$`, 'i') }
         });
 
-        if (!menuExist) {
-            return next(new Error('Subcategory not found!'));
-        }
-
-        const itemExist = await MenuItem.findOne({
-            shopId: shopExist.id,
-            subCategoryId: menuExist.id,
-            name
-        });
-
-        if (itemExist) {
-            return next(new Error(`${name} already exists in this subcategory!`));
-        }
+        if (!menuExist) return next(new Error('Subcategory not found!'));
 
         const newItem = await MenuItem.create({
             shopId: shopExist.id,
             categoryId: menuExist.categoryId,
             subCategoryId: menuExist.id,
             name: name,
-            price: Number(price),
+            variants: parsedVariants,
             image: imageUrl,
             deleteUrl: deleteUrl
         });
+
         Msg(res, 'Menu created Successfully!', newItem);
     } catch (err) {
         console.log('err: ', err);

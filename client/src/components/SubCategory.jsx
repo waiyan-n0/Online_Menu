@@ -114,20 +114,20 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
     return (
         <div className='flex flex-col space-y-4 mt-4 mx-4 p-4'>
             {filteredSubCategories.length === 0 ? (
-                <div className='bg-blue-600/40 border border-white/20 rounded-xl p-6 text-center text-white/80 text-xs'>
-                    There is no item yet for "{selectedCategory}".
+                <div className='bg-amber-700 border rounded-xl p-6 text-center text-white/80'>
+                    There is no menu yet.
                 </div>
             ) : (
                 <div className='flex flex-wrap gap-2 text-white items-center'>
                     {filteredSubCategories.map((sub) => (
                         <div key={sub._id} onClick={() => handleSubMenu(sub.name)}
-                             className='relative w-full flex items-center justify-center bg-blue-700 p-4 rounded-lg cursor-pointer shadow-sm hover:bg-blue-600 transition-colors border border-white/40'>
+                             className='relative w-full flex items-center justify-center bg-amber-800 p-4 rounded-lg cursor-pointer shadow-sm hover:bg-amber-700 transition-colors border'>
                             <span className="text-center font-medium">{sub.name}</span>
                             {isEditMode && (
-                                <button className="absolute right-4 p-2 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition-colors cursor-pointer" title="Delete Subcategory"
+                                <button className="absolute right-4 p-3 bg-yellow-400 hover:bg-yellow-600 rounded-full shadow-lg transition-colors cursor-pointer" title="Delete Subcategory"
                                     onClick={(e) => {e.stopPropagation(); handleDelete(sub._id);
                                 }} >
-                                    <Trash2 className="w-3.5 h-3.5"/>
+                                    <Trash2 className="w-4 h-4"/>
                                 </button>
                             )}
                         </div>
@@ -136,8 +136,8 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
             )}
 
             {isEditMode && (
-                <div className='flex justify-center'>
-                    <button className='w-full flex justify-center items-center bg-blue-600/40 hover:bg-blue-800 rounded-xl p-4 text-center text-xs font-semibold cursor-pointer text-white border border-dashed border-white/60 transition-colors'
+                <div className='fixed bottom-2 left-0 right-0 z-40 p-4 border-t border-white/10 flex justify-center'>
+                    <button className='w-full flex justify-center items-center text-white bg-amber-600 rounded-xl p-4 text-center font-semibold cursor-pointer transition-colors'
                         onClick={() => { getSubCategory(); setIsModalOpen(true)} }
                     >
                         <Plus className='mr-2 w-4 h-4'/> Add Subcategory
