@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import {Plus, X, FolderPlus, Trash2} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import { Plus, X, FolderPlus, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
     const navigate = useNavigate();
@@ -26,7 +26,6 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
                 setError(true);
                 return;
             }
-            //console.log('data: ',data)
             setAllSubCategories(data.result.subCategory);
             setCategories(data.result.category);
         } catch (err) {
@@ -77,19 +76,18 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
     };
 
     const activeCatObj = categories.find(cat => cat.name === selectedCategory);
-    //console.log('active cate: ', activeCatObj);
-    //console.log('sub categories: ',allSubCategories)
     const filteredSubCategories = allSubCategories.filter(
         sub => activeCatObj && sub.categoryId === activeCatObj._id
     );
-    const handleSubMenu = async(submenu) =>{
-        //console.log(name);
-        if(!isEditMode) {
+
+    const handleSubMenu = async (submenu) => {
+        if (!isEditMode) {
             navigate(`/menu/${slug}/${submenu}`);
             return;
         }
         navigate(`/menu/${slug}/${submenu}?mode#edit`);
-    }
+    };
+
     const handleDelete = async (Id) => {
         if (!window.confirm("This will delete the category and all its menu items. Are you sure you want to delete this?")) return;
         try {
@@ -112,22 +110,26 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
     };
 
     return (
-        <div className='flex flex-col space-y-4 mt-4 mx-4 p-4'>
+        <div className='flex flex-col space-y-4 mt-4 mx-4 p-4 bg-white text-black'>
             {filteredSubCategories.length === 0 ? (
-                <div className='bg-amber-700 border rounded-xl p-6 text-center text-white/80'>
+                <div className='bg-white border border-black rounded-xl p-6 text-center text-black'>
                     There is no menu yet.
                 </div>
             ) : (
-                <div className='flex flex-wrap gap-2 text-white items-center'>
+                <div className='flex flex-wrap gap-2 items-center'>
                     {filteredSubCategories.map((sub) => (
                         <div key={sub._id} onClick={() => handleSubMenu(sub.name)}
-                             className='relative w-full flex items-center justify-center bg-amber-800 p-4 rounded-lg cursor-pointer shadow-sm hover:bg-amber-700 transition-colors border'>
+                            className='relative w-full flex items-center justify-center bg-white text-black p-4 rounded-lg cursor-pointer hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors border border-black'
+                        >
                             <span className="text-center font-medium">{sub.name}</span>
                             {isEditMode && (
-                                <button className="absolute right-4 p-3 bg-yellow-400 hover:bg-yellow-600 rounded-full shadow-lg transition-colors cursor-pointer" title="Delete Subcategory"
-                                    onClick={(e) => {e.stopPropagation(); handleDelete(sub._id);
-                                }} >
-                                    <Trash2 className="w-4 h-4"/>
+                                <button className="absolute right-4 p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors cursor-pointer" title="Delete Subcategory"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(sub._id);
+                                    }}
+                                >
+                                    <Trash2 className="w-4 h-4" />
                                 </button>
                             )}
                         </div>
@@ -136,34 +138,36 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
             )}
 
             {isEditMode && (
-                <div className='fixed bottom-2 left-0 right-0 z-40 p-4 border-t border-white/10 flex justify-center'>
-                    <button className='w-full flex justify-center items-center text-white bg-amber-600 rounded-xl p-4 text-center font-semibold cursor-pointer transition-colors'
-                        onClick={() => { getSubCategory(); setIsModalOpen(true)} }
+                <div className='fixed bottom-2 left-0 right-0 z-40 p-4 bg-white border-t border-black flex justify-center'>
+                    <button className='w-full max-w-2xl flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 rounded-xl p-4 text-center font-semibold cursor-pointer transition-colors'
+                        onClick={() => {
+                            getSubCategory();
+                            setIsModalOpen(true);
+                        }}
                     >
-                        <Plus className='mr-2 w-4 h-4'/> Add Subcategory
+                        <Plus className='mr-2 w-4 h-4' /> Add Subcategory
                     </button>
                 </div>
             )}
 
             {isModalOpen && (
-                <div
-                    className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-start sm:items-center justify-center z-50 p-4 overflow-y-auto">
-                    <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-2xl w-full max-w-sm space-y-4 relative my-8 sm:my-0 border border-gray-100">
-                        <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                            <h3 className="text-sm font-bold flex items-center gap-2 text-gray-800">
-                                <FolderPlus className="w-4 h-4 text-blue-600"/> Add Subcategory
+                <div className="fixed inset-0 bg-black/60 flex items-start sm:items-center justify-center z-50 p-4 overflow-y-auto">
+                    <div className="bg-white text-black p-6 rounded-xl w-full max-w-sm space-y-4 relative my-8 sm:my-0 border-2 border-black">
+                        <div className="flex items-center justify-between border-b border-black pb-3">
+                            <h3 className="text-sm font-bold flex items-center gap-2 text-black">
+                                <FolderPlus className="w-4 h-4 text-blue-600" /> Add Subcategory
                             </h3>
-                            <button className="p-1 text-gray-400 hover:text-gray-600 rounded-lg transition-colors cursor-pointer"
-                                    onClick={() => setIsModalOpen(false)}
+                            <button className="p-1 bg-black text-white hover:bg-blue-600 rounded-lg transition-colors cursor-pointer"
+                                onClick={() => setIsModalOpen(false)}
                             >
-                                <X className="w-4 h-4"/>
+                                <X className="w-4 h-4" />
                             </button>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-3">
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 mb-1">Select Main Category</label>
+                                <label className="block text-xs font-semibold text-black mb-1">Select Main Category</label>
                                 <select value={modalCategory} onChange={(e) => setModalCategory(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-600 bg-white"
+                                    className="w-full px-3 py-2 border border-black rounded-lg text-xs focus:outline-none focus:border-blue-600 bg-white text-black"
                                 >
                                     {categories.map((cat) => (
                                         <option key={cat._id} value={cat.name}>
@@ -173,19 +177,18 @@ const SubCategory = ({ slug, isEditMode, selectedCategory }) => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-gray-700 mb-1">Subcategory Name</label>
+                                <label className="block text-xs font-semibold text-black mb-1">Subcategory Name</label>
                                 <input ref={inputRef} type="text" placeholder="e.g. Soup Menu, Tea Series" required
-                                       value={subCategoryName} onChange={(e) => setSubCategoryName(e.target.value)}
-                                       className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-blue-600"
+                                    value={subCategoryName} onChange={(e) => setSubCategoryName(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white text-black border border-black rounded-lg text-xs focus:outline-none focus:border-blue-600"
                                 />
                             </div>
                             <div className="pt-2 flex items-center gap-2">
-                                <button type="button" onClick={() => setIsModalOpen(false)}
-                                        className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs transition-colors cursor-pointer"
-                                >
+                                <button type="button" className="flex-1 py-2.5 bg-white hover:bg-black text-black hover:text-white border border-black font-medium rounded-lg text-xs transition-colors cursor-pointer"
+                                        onClick={() => setIsModalOpen(false)}>
                                     Cancel
                                 </button>
-                                <button type="submit" className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl text-xs transition-colors shadow-sm cursor-pointer">
+                                <button type="submit" className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition-colors cursor-pointer">
                                     Save
                                 </button>
                             </div>

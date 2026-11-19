@@ -76,7 +76,29 @@ const shopLogin = async (req, res, next) => {
     }
     Msg(res,'Login Success!', isExist);
 }
+const updateShop = async(req,res,next) =>{
+    try{
+        const {slug} = req.params;
+        const {tag,location,phone} = req.body;
+        const isExist = await shop.findOne({slug: slug});
+        if(!isExist){
+            return next(new Error('Shop was not found!'));
+        }
+        const updatedShop = await shop.findOneAndUpdate(
+            {slug: slug},
+            {$set:{tag,location,phone}},
+            {returnDocument: 'after', runValidators: true }
+        );
+        if(!updatedShop){
+            return Msg(res, 'Shop was not found!',updatedShop);
+        }
+        Msg(res, 'Shop Profile Updated Successfully!');
+    }catch(err){
+        console.log('error: ',err);
+        next(new Error('Error updating shop profile!'));
+    }
+}
 
 module.exports = {
-    createShop, getAllShops, getShopDetailsBySlug, shopLogin
+    createShop, getAllShops, getShopDetailsBySlug, shopLogin, updateShop
 };

@@ -124,7 +124,6 @@ const createMenuItem = async (req, res, next) => {
             return next(new Error('Name and pricing variants are required!'));
         }
 
-        // Parse variants and default empty option names to "Standard"
         const parsedVariants = (typeof variants === 'string' ? JSON.parse(variants) : variants).map(v => ({
             option: v.option && v.option.trim() !== '' ? v.option.trim() : 'Standard',
             price: Number(v.price)
@@ -279,6 +278,7 @@ const deleteCategory = async(req, res, next) =>{
         next(new Error('Error deleting Category'));
     }
 }
+
 
 module.exports = {
     createCategory, getMainCategory,

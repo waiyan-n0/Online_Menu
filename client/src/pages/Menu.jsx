@@ -14,7 +14,7 @@ const Menu = () => {
         <div className="flex flex-col min-h-screen">
             <Header slug={slug} isEditMode={isEditMode}/>
             <MainCategory slug={slug} isEditMode={isEditMode}/>
-            <Footer/>
+            <Footer isEditMode={isEditMode}/>
         </div>
     );
 }
